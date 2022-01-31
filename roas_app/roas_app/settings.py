@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "ad_campaign.apps.AdCampaignConfig",
+    "django_extensions"
 ]
 
 MIDDLEWARE = [

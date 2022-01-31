@@ -21,13 +21,19 @@ class SearchTerms(models.Model):
     conversions = models.IntegerField(default=0)
     search_term = models.CharField(max_length=255)
 
+    class Meta:
+        unique_together = (("ad_group_id", "campaign_id"),)
+
 
 class AdGroups(StatusChoices):
     ad_group_id = models.BigIntegerField()
     campaign_id = models.ForeignKey("Campaigns", on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
 
+    class Meta:
+        unique_together = (("ad_group_id", "campaign_id"),)
+
 
 class Campaigns(StatusChoices):
-    campaign_id = models.BigIntegerField(null=True)
+    campaign_id = models.BigIntegerField(primary_key=True)
     structure_value = models.CharField(max_length=50)
