@@ -1,12 +1,17 @@
 import pytest
 import os
-from ad_campaign.models import AdGroups, Campaigns, SearchTerms
+from ad_campaign.models import AdGroup, Campaign, SearchTerm
 from django.core.management import call_command
 
 
 @pytest.fixture(scope='session')
-def test_directory():
-    return os.path.abspath('test_data')
+def app_directory():
+    return os.path.abspath('ad_campaign')
+
+
+@pytest.fixture(scope='session')
+def test_directory(app_directory):
+    return os.path.join(app_directory, 'tests/test_data')
 
 
 @pytest.fixture(scope='session')
@@ -33,15 +38,15 @@ def load_data(django_db_setup, django_db_blocker, campaign_filepath, search_term
 
 
 @pytest.fixture
-def get_all_campaigns(db) -> Campaigns:
-    return Campaigns.objects.all()
+def get_all_campaigns(db) -> Campaign:
+    return Campaign.objects.all()
 
 
 @pytest.fixture
-def get_all_search_terms(db) -> SearchTerms:
-    return SearchTerms.objects.all()
+def get_all_search_terms(db) -> SearchTerm:
+    return SearchTerm.objects.all()
 
 
 @pytest.fixture
-def get_all_ad_groups(db) -> AdGroups:
-    return AdGroups.objects.all()
+def get_all_ad_groups(db) -> AdGroup:
+    return AdGroup.objects.all()
