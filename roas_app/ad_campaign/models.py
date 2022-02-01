@@ -17,12 +17,12 @@ class SearchTerms(models.Model):
     campaign_id = models.ForeignKey("Campaigns", on_delete=models.CASCADE)
     clicks = models.IntegerField(default=0)
     cost = models.FloatField()
-    conversion_value = models.IntegerField(default=0)
+    conversion_value = models.FloatField(default=0)
     conversions = models.IntegerField(default=0)
     search_term = models.CharField(max_length=255)
 
     class Meta:
-        unique_together = (("ad_group_id", "campaign_id"),)
+        unique_together = ['date', 'ad_group_id', 'campaign_id', 'search_term']
 
 
 class AdGroups(StatusChoices):
@@ -31,7 +31,7 @@ class AdGroups(StatusChoices):
     alias = models.CharField(max_length=255)
 
     class Meta:
-        unique_together = (("ad_group_id", "campaign_id"),)
+        unique_together = ['ad_group_id', 'campaign_id', 'alias']
 
 
 class Campaigns(StatusChoices):
