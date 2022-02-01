@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class StatusChoices(models.Model):
+class StatusChoice(models.Model):
     ENABLED = "ENABLED"
     REMOVED = "REMOVED"
     STATUS_CHOICES = [(ENABLED, "ENABLED"), (REMOVED, "REMOVED")]
@@ -11,10 +11,10 @@ class StatusChoices(models.Model):
         abstract = True
 
 
-class SearchTerms(models.Model):
+class SearchTerm(models.Model):
     date = models.DateField()
     ad_group_id = models.BigIntegerField()
-    campaign_id = models.ForeignKey("Campaigns", on_delete=models.CASCADE)
+    campaign_id = models.ForeignKey("Campaign", on_delete=models.CASCADE)
     clicks = models.IntegerField(default=0)
     cost = models.FloatField()
     conversion_value = models.FloatField(default=0)
@@ -25,15 +25,15 @@ class SearchTerms(models.Model):
         unique_together = ['date', 'ad_group_id', 'campaign_id', 'search_term']
 
 
-class AdGroups(StatusChoices):
+class AdGroup(StatusChoice):
     ad_group_id = models.BigIntegerField()
-    campaign_id = models.ForeignKey("Campaigns", on_delete=models.CASCADE)
+    campaign_id = models.ForeignKey("Campaign", on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
 
     class Meta:
         unique_together = ['ad_group_id', 'campaign_id', 'alias']
 
 
-class Campaigns(StatusChoices):
+class Campaign(StatusChoice):
     campaign_id = models.BigIntegerField(primary_key=True)
     structure_value = models.CharField(max_length=50)

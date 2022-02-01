@@ -1,14 +1,9 @@
-import logging
 import os
-from csv import DictReader, reader, writer
+from csv import DictReader
 
-from ad_campaign.models import Campaigns, SearchTerms, AdGroups
+from ad_campaign.models import Campaign, SearchTerm, AdGroup
 from django.core.management import BaseCommand
-from django.db import models
 from tqdm import tqdm
-
-LOG = logging.getLogger(__name__)
-LOG.setLevel(logging.DEBUG)
 
 
 class Command(BaseCommand):
@@ -24,15 +19,15 @@ class Command(BaseCommand):
         if options["campaigns"]:
             input_files = options["campaigns"]
             for file in input_files:
-                campaign_dict = self.load_data(Campaigns, 'campaign_id', file)
+                campaign_dict = self.load_data(Campaign, 'campaign_id', file)
         if options["search_terms"]:
             input_files = options["search_terms"]
             for file in input_files:
-                self.load_data(SearchTerms, 'ad_group_id', file, campaign_dict)
+                self.load_data(SearchTerm, 'ad_group_id', file, campaign_dict)
         if options["ad_groups"]:
             input_files = options["ad_groups"]
             for file in input_files:
-                self.load_data(AdGroups, 'ad_group_id', file, campaign_dict)
+                self.load_data(AdGroup, 'ad_group_id', file, campaign_dict)
 
     def load_data(self, model, pk_str, file, fk_dict=None):
         """Inserts CSV data into a specific database object.
