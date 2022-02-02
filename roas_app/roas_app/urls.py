@@ -27,6 +27,6 @@ router.register(r"campaigns", views.CampaignViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("campaign_list/<int:pk>/", views.CampaignList.as_view()),
-    path("", include(router.urls)),
+    path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]

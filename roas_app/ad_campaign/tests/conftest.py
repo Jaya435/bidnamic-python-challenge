@@ -2,7 +2,9 @@ import os
 
 import pytest
 from ad_campaign.models import AdGroup, Campaign, SearchTerm
+from django.contrib.auth.models import User
 from django.core.management import call_command
+from rest_framework.test import APIClient
 
 
 @pytest.fixture(scope="session")
@@ -62,3 +64,24 @@ def get_all_search_terms(db) -> SearchTerm:
 @pytest.fixture
 def get_all_ad_groups(db) -> AdGroup:
     return AdGroup.objects.all()
+
+
+@pytest.fixture
+def create_admin_user(db) -> User:
+    user, _ = User.objects.get_or_create(
+        username="admin",
+        email="superuser@super.com",
+        password="pass",
+        is_staff=True,
+        is_active=True,
+        is_superuser=True,
+    )
+
+    return user
+
+
+@pytest.fixture
+def api_client(create_admin_user: User) -> APIClient:
+    client = APIClient()
+    client.force_authenticate(user=create_admin_user)
+    return client
