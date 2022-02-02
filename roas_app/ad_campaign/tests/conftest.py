@@ -1,40 +1,52 @@
-import pytest
 import os
+
+import pytest
 from ad_campaign.models import AdGroup, Campaign, SearchTerm
 from django.core.management import call_command
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def app_directory():
-    return os.path.abspath('ad_campaign')
+    return os.path.abspath("ad_campaign")
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def test_directory(app_directory):
-    return os.path.join(app_directory, 'tests/test_data')
+    return os.path.join(app_directory, "tests/test_data")
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def campaign_filepath(test_directory):
-    return os.path.join(test_directory, 'test_campaigns.csv')
+    return os.path.join(test_directory, "test_campaigns.csv")
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def search_terms_filepath(test_directory):
-    return os.path.join(test_directory, 'test_search_terms.csv')
+    return os.path.join(test_directory, "test_search_terms.csv")
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def ad_groups_filepath(test_directory):
-    return os.path.join(test_directory, 'test_adgroups.csv')
+    return os.path.join(test_directory, "test_adgroups.csv")
 
 
 @pytest.fixture(autouse=True, scope="session")
-def load_data(django_db_setup, django_db_blocker, campaign_filepath, search_terms_filepath, ad_groups_filepath):
+def load_data(
+    django_db_setup,
+    django_db_blocker,
+    campaign_filepath,
+    search_terms_filepath,
+    ad_groups_filepath,
+):
     with django_db_blocker.unblock():
-        call_command("load_data", campaign_filepath,
-                     "--search_terms", search_terms_filepath,
-                     "--ad_groups", ad_groups_filepath)
+        call_command(
+            "load_data",
+            campaign_filepath,
+            "--search_terms",
+            search_terms_filepath,
+            "--ad_groups",
+            ad_groups_filepath,
+        )
 
 
 @pytest.fixture

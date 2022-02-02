@@ -22,7 +22,7 @@ class SearchTerm(models.Model):
     search_term = models.CharField(max_length=255)
 
     class Meta:
-        unique_together = ['date', 'ad_group_id', 'campaign_id', 'search_term']
+        unique_together = ["date", "ad_group_id", "campaign_id", "search_term"]
 
 
 class AdGroup(StatusChoice):
@@ -31,7 +31,7 @@ class AdGroup(StatusChoice):
     alias = models.CharField(max_length=255)
 
     class Meta:
-        unique_together = ['ad_group_id', 'campaign_id', 'alias']
+        unique_together = ["ad_group_id", "campaign_id", "alias"]
 
 
 class Campaign(StatusChoice):
