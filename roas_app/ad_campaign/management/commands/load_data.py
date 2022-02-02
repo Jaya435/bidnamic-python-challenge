@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 model.objects.bulk_create(object_list, ignore_conflicts=True)
                 msg = f"Successfully inserted {unique_rows} rows into {model._meta.db_table} table."
             else:
-                msg = f"{os.path.abspath(file)} is already saved in the {model._meta.db_table}    table."
+                msg = f"{os.path.abspath(file)} is already saved in the {model._meta.db_table}   table."
 
         self.stdout.write(self.style.SUCCESS(msg))
 
