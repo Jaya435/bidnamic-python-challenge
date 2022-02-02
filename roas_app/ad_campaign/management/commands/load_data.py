@@ -1,7 +1,7 @@
 import os
 from csv import DictReader
 
-from ad_campaign.models import Campaign, SearchTerm, AdGroup
+from ad_campaign.models import AdGroup, Campaign, SearchTerm
 from django.core.management import BaseCommand
 from tqdm import tqdm
 
@@ -19,15 +19,15 @@ class Command(BaseCommand):
         if options["campaigns"]:
             input_files = options["campaigns"]
             for file in input_files:
-                campaign_dict = self.load_data(Campaign, 'campaign_id', file)
+                campaign_dict = self.load_data(Campaign, "campaign_id", file)
         if options["search_terms"]:
             input_files = options["search_terms"]
             for file in input_files:
-                self.load_data(SearchTerm, 'ad_group_id', file, campaign_dict)
+                self.load_data(SearchTerm, "ad_group_id", file, campaign_dict)
         if options["ad_groups"]:
             input_files = options["ad_groups"]
             for file in input_files:
-                self.load_data(AdGroup, 'ad_group_id', file, campaign_dict)
+                self.load_data(AdGroup, "ad_group_id", file, campaign_dict)
 
     def load_data(self, model, pk_str, file, fk_dict=None):
         """Inserts CSV data into a specific database object.
@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 object_ref = object_dict.get(pk_id)
                 if not object_ref:
                     if fk_dict:
-                        row['campaign_id'] = fk_dict[int(row['campaign_id'])]
+                        row["campaign_id"] = fk_dict[int(row["campaign_id"])]
                         object_instance = model(**row)
                         object_list.append(object_instance)
                     else:
@@ -63,7 +63,7 @@ class Command(BaseCommand):
                 model.objects.bulk_create(object_list, ignore_conflicts=True)
                 msg = f"Successfully inserted {unique_rows} rows into {model._meta.db_table} table."
             else:
-                msg = f"{os.path.abspath(file)} is already saved in the {model._meta.db_table}   table."
+                msg = f"{os.path.abspath(file)} is already saved in the {model._meta.db_table}    table."
 
         self.stdout.write(self.style.SUCCESS(msg))
 
