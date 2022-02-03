@@ -16,7 +16,13 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "name"]
 
 
-class CampaignsSerializer(serializers.HyperlinkedModelSerializer):
+class CampaignSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Campaign
         fields = ["campaign_id", "structure_value", "status"]
+
+
+class AdGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AdGroup
+        fields = ["ad_group_id", "campaign_id", "alias", "status"]

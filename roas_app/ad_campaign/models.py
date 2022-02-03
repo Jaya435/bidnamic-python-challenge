@@ -13,7 +13,7 @@ class StatusChoice(models.Model):
 
 class SearchTerm(models.Model):
     date = models.DateField()
-    ad_group_id = models.BigIntegerField()
+    ad_group_id = models.ForeignKey("AdGroup", on_delete=models.CASCADE)
     campaign_id = models.ForeignKey("Campaign", on_delete=models.CASCADE)
     clicks = models.IntegerField(default=0)
     cost = models.FloatField()
@@ -26,12 +26,9 @@ class SearchTerm(models.Model):
 
 
 class AdGroup(StatusChoice):
-    ad_group_id = models.BigIntegerField()
+    ad_group_id = models.BigIntegerField(primary_key=True)
     campaign_id = models.ForeignKey("Campaign", on_delete=models.CASCADE)
     alias = models.CharField(max_length=255)
-
-    class Meta:
-        unique_together = ["ad_group_id", "campaign_id", "alias"]
 
 
 class Campaign(StatusChoice):

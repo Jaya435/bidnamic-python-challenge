@@ -22,7 +22,7 @@ class adGroupsAdmin(admin.ModelAdmin):
 class searchTermsAdmin(admin.ModelAdmin):
     list_display = [
         "date",
-        "ad_group_id",
+        "relate_ad_group",
         "related_campaign",
         "clicks",
         "cost",
@@ -34,4 +34,8 @@ class searchTermsAdmin(admin.ModelAdmin):
     def related_campaign(self, obj):
         return obj.campaign_id.structure_value
 
+    def relate_ad_group(self, obj):
+        return obj.ad_group_id.alias
+
     related_campaign.short_description = "Campaign"
+    relate_ad_group.short_description = "AdGroup"

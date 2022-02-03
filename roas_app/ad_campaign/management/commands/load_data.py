@@ -16,26 +16,33 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         campaign_dict = None
+        adgroup_dict = None
         if options["campaigns"]:
             input_files = options["campaigns"]
             for file in input_files:
                 campaign_dict = self.load_data(Campaign, "campaign_id", file)
-        if options["search_terms"]:
-            input_files = options["search_terms"]
-            for file in input_files:
-                self.load_data(SearchTerm, "ad_group_id", file, campaign_dict)
-        if options["ad_groups"]:
-            input_files = options["ad_groups"]
-            for file in input_files:
-                self.load_data(AdGroup, "ad_group_id", file, campaign_dict)
+            if options["ad_groups"]:
+                input_files = options["ad_groups"]
+                for file in input_files:
+                    adgroup_dict = self.load_data(
+                        AdGroup, "ad_group_id", file, campaign_dict
+                    )
+                if options["search_terms"]:
+                    input_files = options["search_terms"]
+                    for file in input_files:
+                        self.load_data(
+                            SearchTerm, "ad_group_id", file, campaign_dict, adgroup_dict
+                        )
 
-    def load_data(self, model, pk_str, file, fk_dict=None):
+    def load_data(self, model, pk_str, file, campaign_dict=None, adgroup_dict=None):
         """Inserts CSV data into a specific database object.
 
         Args:
             model (model.Model): The database model that data will be inserted into.
             pk_str (str): The name of the primary key column of the database object.
             file (str): The CSV containing the data to loaded.
+            campaign_dict (dict):
+            adgroup_dict (dict):
 
         """
         object_dict = {obj.pk: obj for obj in model.objects.all()}
@@ -49,14 +56,18 @@ class Command(BaseCommand):
                 pk_id = int(row[pk_str])
                 object_ref = object_dict.get(pk_id)
                 if not object_ref:
-                    if fk_dict:
-                        row["campaign_id"] = fk_dict[int(row["campaign_id"])]
+                    if campaign_dict and adgroup_dict:
+                        row["campaign_id"] = campaign_dict[int(row["campaign_id"])]
+                        row["ad_group_id"] = adgroup_dict[int(row["ad_group_id"])]
                         object_instance = model(**row)
-                        object_list.append(object_instance)
+                    elif campaign_dict and not adgroup_dict:
+                        row["campaign_id"] = campaign_dict[int(row["campaign_id"])]
+                        object_instance = model(**row)
+                        object_dict[int(object_instance.pk)] = object_instance
                     else:
                         object_instance = model(**row)
                         object_dict[int(object_instance.pk)] = object_instance
-                        object_list.append(object_instance)
+                    object_list.append(object_instance)
                     unique_rows += 1
 
             if object_list:

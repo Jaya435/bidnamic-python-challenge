@@ -23,10 +23,10 @@ router = routers.DefaultRouter()
 router.register(r"users", views.UserViewSet)
 router.register(r"groups", views.GroupViewSet)
 router.register(r"campaigns", views.CampaignViewSet)
+router.register(r"adgroups", views.AdGroupViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("campaign_list/<int:pk>/", views.CampaignList.as_view()),
     path("api/", include(router.urls)),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]

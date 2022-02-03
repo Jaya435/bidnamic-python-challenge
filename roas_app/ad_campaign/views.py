@@ -1,8 +1,13 @@
 from django.contrib.auth.models import Group, User
-from rest_framework import generics, mixins, permissions, viewsets
+from rest_framework import permissions, viewsets
 
-from .models import Campaign
-from .serializers import CampaignsSerializer, GroupSerializer, UserSerializer
+from .models import AdGroup, Campaign
+from .serializers import (
+    AdGroupSerializer,
+    CampaignSerializer,
+    GroupSerializer,
+    UserSerializer,
+)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -27,28 +32,19 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class CampaignViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows campaigns to be viewed or edited.
     """
 
     queryset = Campaign.objects.all()
-    serializer_class = CampaignsSerializer
+    serializer_class = CampaignSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 
-class CampaignList(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    generics.GenericAPIView,
-):
-    queryset = Campaign.objects.all()
-    serializer_class = CampaignsSerializer
+class AdGroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows campaigns to be viewed or edited.
+    """
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    queryset = AdGroup.objects.all()
+    serializer_class = AdGroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
