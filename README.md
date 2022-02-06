@@ -2,8 +2,8 @@
 
 # Python Software Engineering Challenge
 
-This Repository contains a python project that can insert several CSV files into a PostgreSQL
-database, calculates the Return on Ad Spending, and display the data and a couple of custom queries
+This Repository contains a Django web application that can insert several CSV files into a PostgreSQL
+database, calculates the Return on Ad Spending, and displays the data and a couple of custom queries
 on an API.
 
 ## Getting Started
@@ -55,7 +55,7 @@ make runserver
 
 To perform code formatting
 ```
-make blake
+make black
 ```
 To perform code linting
 ```
