@@ -1,3 +1,5 @@
 black
 isort
 django-extensions
+model-bakery
+pytest-django

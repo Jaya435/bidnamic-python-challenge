@@ -18,9 +18,9 @@ class TestLoadCampaignData:
 
 class TestLoadSearchTermsData:
     def test_load_search_terms__all_data(self, get_all_search_terms):
-        assert len(get_all_search_terms) == 96
+        assert len(get_all_search_terms) == 97
 
 
 class TestLoadAdGroupsData:
     def test_load_ad_groups__all_data(self, get_all_ad_groups):
-        assert len(get_all_ad_groups) == 56
+        assert len(get_all_ad_groups) == 57

@@ -59,6 +59,12 @@ class Command(BaseCommand):
                     if campaign_dict and adgroup_dict:
                         row["campaign_id"] = campaign_dict[int(row["campaign_id"])]
                         row["ad_group_id"] = adgroup_dict[int(row["ad_group_id"])]
+                        try:
+                            row["roas"] = float(row["conversion_value"]) / float(
+                                row["cost"]
+                            )
+                        except ZeroDivisionError:
+                            row["roas"] = 0
                         object_instance = model(**row)
                     elif campaign_dict and not adgroup_dict:
                         row["campaign_id"] = campaign_dict[int(row["campaign_id"])]
@@ -69,12 +75,25 @@ class Command(BaseCommand):
                         object_dict[int(object_instance.pk)] = object_instance
                     object_list.append(object_instance)
                     unique_rows += 1
-
+                if len(object_list) == 5000:
+                    model.objects.bulk_create(object_list, ignore_conflicts=True)
+                    msg = (
+                        f"Successfully inserted 5000 "
+                        f"rows into {model._meta.db_table} table."
+                    )
+                    self.stdout.write(self.style.SUCCESS(msg))
+                    object_list = []
             if object_list:
                 model.objects.bulk_create(object_list, ignore_conflicts=True)
-                msg = f"Successfully inserted {unique_rows} rows into {model._meta.db_table} table."
+                msg = (
+                    f"Successfully inserted {unique_rows} "
+                    f"rows into {model._meta.db_table} table."
+                )
             else:
-                msg = f"{os.path.abspath(file)} is already saved in the {model._meta.db_table} table."
+                msg = (
+                    f"{os.path.abspath(file)} is already saved in the "
+                    f"{model._meta.db_table} table."
+                )
 
         self.stdout.write(self.style.SUCCESS(msg))
 

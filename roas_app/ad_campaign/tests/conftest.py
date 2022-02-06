@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 
 @pytest.fixture(scope="session")
 def app_directory():
-    return os.path.abspath("ad_campaign")
+    return os.path.abspath("roas_app/ad_campaign")
 
 
 @pytest.fixture(scope="session")
@@ -67,7 +67,7 @@ def get_all_ad_groups(db) -> AdGroup:
 
 
 @pytest.fixture
-def create_admin_user(db) -> User:
+def admin_user(db) -> User:
     user, _ = User.objects.get_or_create(
         username="admin",
         email="superuser@super.com",
@@ -81,7 +81,7 @@ def create_admin_user(db) -> User:
 
 
 @pytest.fixture
-def api_client(create_admin_user: User) -> APIClient:
+def api_client(admin_user) -> APIClient:
     client = APIClient()
-    client.force_authenticate(user=create_admin_user)
+    client.force_authenticate(user=admin_user)
     return client

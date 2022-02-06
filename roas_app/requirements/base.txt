@@ -1,2 +1,5 @@
 Django<4
 psycopg2-binary
+django-filter
+djangorestframework
+tqdm
